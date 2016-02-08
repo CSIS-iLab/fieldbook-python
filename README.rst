@@ -2,26 +2,33 @@
 Fieldbook API Client
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/fieldbook.svg
-        :target: https://pypi.python.org/pypi/fieldbook
-
-.. image:: https://img.shields.io/travis/dcloud/fieldbook.svg
-        :target: https://travis-ci.org/dcloud/fieldbook
-
-.. image:: https://readthedocs.org/projects/fieldbook/badge/?version=latest
-        :target: https://readthedocs.org/projects/fieldbook/?badge=latest
-        :alt: Documentation Status
-
-
-
 
 * Free software: ISC license
 * Documentation: https://fieldbook.readthedocs.org.
 
-Features
+Installation
 --------
 
-* TODO
+`pip install git+https://github.com/CSIS-iLab/fieldbook-python.git`
+
+Usage
+-------
+
+```
+from fieldbook import Fieldbook
+
+client = Fieldbook(key='yourkey', secret='yoursecret', book_id='fieldbook_id')
+
+# list sheets in book
+print(client.sheets())
+
+# Request data from a sheet, with filters
+data = client.get('people', params={'first_name': 'John', 'include': 'first_name,last_name,alias'})
+```
+
+See the Fieldbook_ API docs for more information.
+
+.. _Fieldbook: https://github.com/fieldbook/api-docs
 
 Credits
 ---------
