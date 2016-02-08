@@ -16,8 +16,7 @@ Usage
 
 A basic example:
 
-.. code-block:: python
-    :linenos:
+::
 
     from fieldbook import Fieldbook
 
