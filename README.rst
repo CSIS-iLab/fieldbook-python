@@ -14,17 +14,21 @@ Installation
 Usage
 -------
 
-```
-from fieldbook import Fieldbook
+A basic example:
 
-client = Fieldbook(key='yourkey', secret='yoursecret', book_id='fieldbook_id')
+.. code-block:: python
+    :linenos:
 
-# list sheets in book
-print(client.sheets())
+    from fieldbook import Fieldbook
 
-# Request data from a sheet, with filters
-data = client.get('people', params={'first_name': 'John', 'include': 'first_name,last_name,alias'})
-```
+    client = Fieldbook(key='yourkey', secret='yoursecret', book_id='fieldbook_id')
+
+    # list sheets in book
+    print(client.sheets())
+
+    # Request data from a sheet, with filters
+    data = client.get('people', params={'first_name': 'John', 'include': 'first_name,last_name,alias'})
+
 
 See the Fieldbook_ API docs for more information.
 
