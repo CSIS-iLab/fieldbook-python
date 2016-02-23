@@ -9,6 +9,7 @@ Tests for `fieldbook` module.
 """
 
 import unittest
+from unittest.mock import MagicMock
 import os
 
 from fieldbook import Fieldbook
@@ -45,6 +46,46 @@ class TestFieldbook(unittest.TestCase):
         self.assertEqual(client._secret, 'TEST_ENV_SECRET')
         self.assertEqual(client.session.auth, ('TEST_ENV_KEY', 'TEST_ENV_SECRET'))
 
+    def test_client_get_sheets(self):
+        client = Fieldbook()
+        expected_value = ["foo", "bar", "baz"]
+
+        client._get = MagicMock(return_value=expected_value)
+        value = client.sheets('fakebook')
+
+        client._get.assert_called_with('fakebook')
+        self.assertListEqual(value, expected_value)
+
+    def test_client_get_sheets_using_initial_book_id(self):
+        client = Fieldbook(book_id='fakebook')
+        expected_value = ["foo", "bar", "baz"]
+
+        client._get = MagicMock(return_value=expected_value)
+        client.sheets()
+
+        self.assertIsNotNone(client.book_id)
+        client._get.assert_called_with('fakebook')
+
+    def test_client_get_sheet(self):
+        client = Fieldbook(book_id='fakebook')
+        expected_value = [
+            {
+                "id": 12,
+                "record_url": "https://fieldbook.com/records/fakesheet",
+                "column1": "text",
+                "column2": []
+            }
+        ]
+
+        client._get = MagicMock(return_value=expected_value)
+
+        value = client.get('fakesheet')
+
+        self.assertIsNotNone(client.book_id)
+        client._get.assert_called_with('fakebook', sheet_name='fakesheet', params=None)
+        self.assertListEqual(value, expected_value)
+        self.assertIn('column2', value[0])
+        self.assertListEqual(value[0]['column2'], [])
 
 if __name__ == '__main__':
     import sys
