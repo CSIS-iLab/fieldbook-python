@@ -2,7 +2,7 @@
 
 import requests
 from urllib.parse import urljoin
-
+from os import getenv
 
 class Fieldbook(object):
     """Client for Fieldbook API: https://github.com/fieldbook/api-docs"""
@@ -11,15 +11,17 @@ class Fieldbook(object):
 
     def __init__(self, key=None, secret=None, book_id=None):
         super(Fieldbook, self).__init__()
-        self._key = key
-        self._secret = secret
+        self._key = key if key else getenv('FIELDBOOK_API_KEY', None)
+        self._secret = secret if secret else getenv('FIELDBOOK_API_SECRET', None)
         self.book_id = book_id
         self.session = requests.Session()
         if self._key and self._secret:
             self.set_auth(self._key, self._secret)
 
     def set_auth(self, key, secret):
-        self.session.auth = (key, secret)
+        self._key = key
+        self._secret = secret
+        self.session.auth = (self._key, self._secret)
 
     def _make_url(self, book_id, sheet_name=None):
         return urljoin(Fieldbook.BASE_URL, "/".join((Fieldbook.API_VERSION, book_id, sheet_name or '')))
