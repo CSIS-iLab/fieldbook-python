@@ -4,10 +4,13 @@ import requests
 from urllib.parse import urljoin
 from os import getenv
 
+
 class Fieldbook(object):
     """Client for Fieldbook API: https://github.com/fieldbook/api-docs"""
     BASE_URL = "https://api.fieldbook.com"
     API_VERSION = "v1"
+
+    BOOK_ID_REQ_MSG = 'You must specify a book_id kwarg either in this method or when initializing the client.'
 
     def __init__(self, key=None, secret=None, book_id=None):
         super(Fieldbook, self).__init__()
@@ -40,8 +43,12 @@ class Fieldbook(object):
 
     def sheets(self, book_id=None):
         """Returns a list of sheets associated with a book"""
-        return self._get(book_id)
+        if not book_id and not self.book_id:
+            raise Exception(BOOK_ID_REQ_MSG)
+        return self._get(book_id or self.book_id)
 
     def get(self, sheet_name, book_id=None, params=None):
         """Query a named sheet"""
-        return self._get(book_id, sheet_name=sheet_name, params=params)
+        if not book_id and not self.book_id:
+            raise Exception(BOOK_ID_REQ_MSG)
+        return self._get(book_id or self.book_id, sheet_name=sheet_name, params=params)
