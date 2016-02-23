@@ -24,6 +24,14 @@ class TestFieldbook(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_client_makes_correct_urls(self):
+        expected_url = 'https://api.fieldbook.com/v1/fakebook/fakesheet'
+        client = Fieldbook()
+
+        url_val = client._make_url('fakebook', sheet_name='fakesheet')
+
+        self.assertEqual(url_val, expected_url)
+
     def test_client_intialize_with_authentication(self):
         client = Fieldbook(key='foo', secret='bar')
 
