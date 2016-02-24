@@ -44,11 +44,11 @@ class Fieldbook(object):
     def sheets(self, book_id=None):
         """Returns a list of sheets associated with a book"""
         if not book_id and not self.book_id:
-            raise Exception(BOOK_ID_REQ_MSG)
+            raise Exception(Fieldbook.BOOK_ID_REQ_MSG)
         return self._get(book_id or self.book_id)
 
     def get(self, sheet_name, book_id=None, params=None):
         """Query a named sheet"""
         if not book_id and not self.book_id:
-            raise Exception(BOOK_ID_REQ_MSG)
+            raise Exception(Fieldbook.BOOK_ID_REQ_MSG)
         return self._get(book_id or self.book_id, sheet_name=sheet_name, params=params)

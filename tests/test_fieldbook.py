@@ -95,6 +95,26 @@ class TestFieldbook(unittest.TestCase):
         self.assertIn('column2', value[0])
         self.assertListEqual(value[0]['column2'], [])
 
+    def test_sheet_query_params_passed(self):
+        client = Fieldbook('fakebook')
+
+        expected_value = [
+            {
+                "id": 12,
+                "record_url": "https://fieldbook.com/records/fakesheet",
+                "column1": "text",
+                "column2": []
+            }
+        ]
+
+        client._get = MagicMock(return_value=expected_value)
+        value = client.get('fakesheet', params={'column1': 'text'})
+
+        self.assertIsNotNone(client.book_id)
+        client._get.assert_called_with('fakebook', sheet_name='fakesheet', params={'column1': 'text'})
+        self.assertListEqual(value, expected_value)
+
+
 if __name__ == '__main__':
     import sys
     sys.exit(unittest.main())
