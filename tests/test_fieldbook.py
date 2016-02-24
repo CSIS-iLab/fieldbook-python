@@ -9,7 +9,13 @@ Tests for `fieldbook` module.
 """
 
 import unittest
-from unittest.mock import MagicMock
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    try:
+        from mock import MagicMock
+    except Exception as e:
+        raise
 import os
 
 from fieldbook import Fieldbook
