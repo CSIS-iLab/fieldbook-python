@@ -96,7 +96,7 @@ class TestFieldbook(unittest.TestCase):
         self.assertListEqual(value[0]['column2'], [])
 
     def test_sheet_query_params_passed(self):
-        client = Fieldbook('fakebook')
+        client = Fieldbook(book_id='fakebook')
 
         expected_value = [
             {
