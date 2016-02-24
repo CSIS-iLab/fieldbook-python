@@ -80,9 +80,8 @@ Ready to contribute? Here's how to set up `fieldbook` for local development.
 
     $ flake8 fieldbook tests
     $ python setup.py test
-    $ tox
 
-   To get flake8 and tox, just pip install them into your virtualenv.
+   To get flake8, just pip install it into your virtualenv.
 
 6. Commit your changes and push your branch to GitHub::
 
