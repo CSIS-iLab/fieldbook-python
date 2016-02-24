@@ -6,6 +6,9 @@ A Fieldbook python3.x client. Currently a read-only client.
 
 * Free software: ISC license
 
+.. image:: https://travis-ci.org/CSIS-iLab/fieldbook-python.svg?branch=master
+    :alt: Build Status
+
 Installation
 --------
 
