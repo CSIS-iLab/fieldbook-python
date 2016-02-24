@@ -2,9 +2,9 @@
 Fieldbook API Client
 ===============================
 
+A Fieldbook python3.x client. Currently a read-only client.
 
 * Free software: ISC license
-* Documentation: https://fieldbook.readthedocs.org.
 
 Installation
 --------
