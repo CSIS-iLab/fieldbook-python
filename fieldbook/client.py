@@ -6,11 +6,12 @@ from os import getenv
 
 
 class Fieldbook(object):
-    """Client for Fieldbook API: https://github.com/fieldbook/api-docs"""
+    """
+        Client for Fieldbook API: https://github.com/fieldbook/api-docs
+        Initialize with a fieldbook_id and optionally the api key (name) and secret.
+    """
     BASE_URL = "https://api.fieldbook.com"
     API_VERSION = "v1"
-
-    BOOK_ID_REQ_MSG = 'You must specify a book_id kwarg either in this method or when initializing the client.'
 
     def __init__(self, book_id, key=None, secret=None):
         super(Fieldbook, self).__init__()
@@ -38,7 +39,7 @@ class Fieldbook(object):
             raise resp.raise_for_status()
         return resp.json()
 
-    def sheets(self, book_id=None):
+    def sheets(self):
         """Returns a list of sheets associated with a book"""
         return self._get()
 
