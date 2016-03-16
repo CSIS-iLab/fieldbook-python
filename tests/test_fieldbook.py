@@ -32,21 +32,21 @@ class TestFieldbook(unittest.TestCase):
 
     def test_client_makes_correct_urls(self):
         expected_url = 'https://api.fieldbook.com/v1/fakebook/fakesheet'
-        client = Fieldbook()
+        client = Fieldbook('fakebook')
 
-        url_val = client._make_url('fakebook', sheet_name='fakesheet')
+        url_val = client._make_url(sheet_name='fakesheet')
 
         self.assertEqual(url_val, expected_url)
 
     def test_client_intialize_with_authentication(self):
-        client = Fieldbook(key='foo', secret='bar')
+        client = Fieldbook('fakebook', key='foo', secret='bar')
 
         self.assertEqual(client._key, 'foo')
         self.assertEqual(client._secret, 'bar')
         self.assertEqual(client.session.auth, ('foo', 'bar'))
 
     def test_client_set_auth_separately(self):
-        client = Fieldbook()
+        client = Fieldbook('fakebook')
         client.set_auth('foo', 'bar')
 
         self.assertEqual(client._key, 'foo')
@@ -54,34 +54,23 @@ class TestFieldbook(unittest.TestCase):
         self.assertEqual(client.session.auth, ('foo', 'bar'))
 
     def test_client_auth_from_env(self):
-        client = Fieldbook()
+        client = Fieldbook('fakebook')
 
         self.assertEqual(client._key, 'TEST_ENV_KEY')
         self.assertEqual(client._secret, 'TEST_ENV_SECRET')
         self.assertEqual(client.session.auth, ('TEST_ENV_KEY', 'TEST_ENV_SECRET'))
 
     def test_client_get_sheets(self):
-        client = Fieldbook()
+        client = Fieldbook('fakebook')
         expected_value = ["foo", "bar", "baz"]
 
         client._get = MagicMock(return_value=expected_value)
-        value = client.sheets('fakebook')
+        value = client.sheets()
 
-        client._get.assert_called_with('fakebook')
         self.assertListEqual(value, expected_value)
 
-    def test_client_get_sheets_using_initial_book_id(self):
-        client = Fieldbook(book_id='fakebook')
-        expected_value = ["foo", "bar", "baz"]
-
-        client._get = MagicMock(return_value=expected_value)
-        client.sheets()
-
-        self.assertIsNotNone(client.book_id)
-        client._get.assert_called_with('fakebook')
-
-    def test_client_get_sheet(self):
-        client = Fieldbook(book_id='fakebook')
+    def test_client_sheet_list(self):
+        client = Fieldbook('fakebook')
         expected_value = [
             {
                 "id": 12,
@@ -93,16 +82,16 @@ class TestFieldbook(unittest.TestCase):
 
         client._get = MagicMock(return_value=expected_value)
 
-        value = client.get('fakesheet')
+        value = client.list('fakesheet')
 
         self.assertIsNotNone(client.book_id)
-        client._get.assert_called_with('fakebook', sheet_name='fakesheet', params=None)
+        client._get.assert_called_with(sheet_name='fakesheet')
         self.assertListEqual(value, expected_value)
         self.assertIn('column2', value[0])
         self.assertListEqual(value[0]['column2'], [])
 
     def test_sheet_query_params_passed(self):
-        client = Fieldbook(book_id='fakebook')
+        client = Fieldbook('fakebook')
 
         expected_value = [
             {
@@ -114,10 +103,10 @@ class TestFieldbook(unittest.TestCase):
         ]
 
         client._get = MagicMock(return_value=expected_value)
-        value = client.get('fakesheet', params={'column1': 'text'})
+        value = client.list('fakesheet', column1='text')
 
         self.assertIsNotNone(client.book_id)
-        client._get.assert_called_with('fakebook', sheet_name='fakesheet', params={'column1': 'text'})
+        client._get.assert_called_with(sheet_name='fakesheet', column1='text')
         self.assertListEqual(value, expected_value)
 
 
