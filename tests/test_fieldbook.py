@@ -69,6 +69,38 @@ class TestFieldbook(unittest.TestCase):
 
         self.assertListEqual(value, expected_value)
 
+    def test_client_get_sheets_add_endpoints(self):
+        client = Fieldbook('fakebook')
+        expected_value = ["foo", "bar", "baz"]
+
+        client._get = MagicMock(return_value=expected_value)
+        value = client.sheets(make_endpoints=True)
+
+        self.assertListEqual(value, expected_value)
+        for v in expected_value:
+            self.assertTrue(hasattr(client, v))
+
+    def test_client_sheet_get(self):
+        client = Fieldbook('fakebook')
+        expected_value = [
+            {
+                "id": 12,
+                "record_url": "https://fieldbook.com/records/fakesheet",
+                "column1": "text",
+                "column2": []
+            }
+        ]
+
+        client._get = MagicMock(return_value=expected_value)
+
+        value = client.get('fakesheet', 12)
+
+        self.assertIsNotNone(client.book_id)
+        client._get.assert_called_with(sheet_name='fakesheet', row_id=12)
+        self.assertEqual(value, expected_value)
+        self.assertIn('column2', value[0])
+        self.assertListEqual(value[0]['column2'], [])
+
     def test_client_sheet_list(self):
         client = Fieldbook('fakebook')
         expected_value = [
