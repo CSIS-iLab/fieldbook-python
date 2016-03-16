@@ -23,13 +23,13 @@ A basic example:
 
     from fieldbook import Fieldbook
 
-    client = Fieldbook(key='yourkey', secret='yoursecret', book_id='fieldbook_id')
+    book = Fieldbook(fieldbook_id, key='yourkey', secret='yoursecret')
 
     # list sheets in book
-    print(client.sheets())
+    print(book.sheets())
 
     # Request data from a sheet, with filters
-    data = client.get('people', params={'first_name': 'John', 'include': 'first_name,last_name,alias'})
+    data = book.get('people', params={'first_name': 'John', 'include': 'first_name,last_name,alias'})
 
 
 See the Fieldbook_ API docs for more information.
