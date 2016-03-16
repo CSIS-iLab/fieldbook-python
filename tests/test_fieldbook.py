@@ -38,6 +38,15 @@ class TestFieldbook(unittest.TestCase):
 
         self.assertEqual(url_val, expected_url)
 
+    def test_client_add_endpoints(self):
+        client = Fieldbook('fakebook')
+        add_endpoints = ["foo", "bar", "baz"]
+
+        client._make_sheet_endpoints(add_endpoints)
+
+        for e in add_endpoints:
+            self.assertTrue(hasattr(client, e))
+
     def test_client_intialize_with_authentication(self):
         client = Fieldbook('fakebook', key='foo', secret='bar')
 
