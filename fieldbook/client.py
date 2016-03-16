@@ -3,6 +3,7 @@
 import requests
 from urllib.parse import urljoin
 from os import getenv
+import types
 
 
 class Fieldbook(object):
@@ -27,6 +28,16 @@ class Fieldbook(object):
         self._secret = secret
         self.session.auth = (self._key, self._secret)
 
+    def _make_sheet_endpoints(self, endpoint_names):
+        def make_endpoint(name):
+            def sheet_endpoint(self, params=None):
+                return self._get(name, params=params)
+            return sheet_endpoint
+        for name in endpoint_names:
+            endpoint = make_endpoint(name)
+            endpoint.__doc__ = "Query '{}' sheet.".format(name)
+            setattr(self, name, types.MethodType(endpoint, self))
+
     def _make_url(self, sheet_name=None):
         return urljoin(Fieldbook.BASE_URL, "/".join((Fieldbook.API_VERSION, self.book_id, sheet_name or '')))
 
@@ -39,9 +50,12 @@ class Fieldbook(object):
             raise resp.raise_for_status()
         return resp.json()
 
-    def sheets(self):
+    def sheets(self, make_endpoints=False):
         """Returns a list of sheets associated with a book"""
-        return self._get()
+        sheets = self._get()
+        if make_endpoints:
+            self._make_sheet_endpoints(sheets)
+        return sheets
 
     def get(self, sheet_name, params=None):
         """Query a named sheet"""
