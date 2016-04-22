@@ -36,6 +36,7 @@ setup(
     package_dir={'fieldbook': 'fieldbook'},
     include_package_data=True,
     install_requires=requirements,
+    entry_points={'console_scripts': ['fieldbook = fieldbook.cli:main']},
     license="ISCL",
     zip_safe=False,
     keywords='fieldbook',
